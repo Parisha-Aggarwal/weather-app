@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet"> -->
+    <title>Document</title>
+    <style>
+        body{
+            background-image: url("weatherimage.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            width: 100%;
+            height: 100%;  
+        }
+        .maincontainer{
+            background-image: linear-gradient(coral,indianred);
+            margin: 0;
+            padding: 20px;
+            position: absolute;
+            top: 40%;
+            left: 40%;
+            width: 300px;
+            border-radius: 20px;
+        }
+        .input input[type="submit"] 
+            {
+                height: 2rem;
+                width: 6rem;
+                font-weight: bold;
+                color:crimson;
+                font-size: 1rem;
+                margin-top: 20px;
+                border: 3px solid blueviolet;
+                border-radius: 10px;
+            }
+        .input input[type="text"] 
+                {
+                    height: 2rem;
+                    width: 15rem;
+                    font-weight: bold;
+                    font-size: 1rem;
+                    padding: 10px;
+                    border: none;
+                    background-color:burlywood;
+                    border: 2px solid #c2c2c2;
+                    border-radius: 20px;
+                    margin-right:4px ;
+                    color:black;
+                }
+        .display 
+            {
+                text-align: center;
+                color:black;
+                font-family:Verdana, Geneva, Tahoma, sans-serif;
+            }
+            #submit:hover{
+                background-color: black;
+                color: bisque;
+                border: none;
+            }
+            .wrapper h2
+            {
+                padding: 5px 0;
+                text-align: center;
+                color: black;
+                font-style: italic;
+            }
+    </style>
+</head>
+<body>
+    <div class="maincontainer">
+        <section class="main">
+          <section class="input">
+            <input type="text" placeholder="Enter any city..." id="cityinput">
+            <input type="submit" value="Submit" id="submit">
+          </section>
+          <section class="display">
+            <div class="wrapper">
+              <h2 id="cityoutput"></h2>
+              <p id="description"></p>
+              <p id="temp"></p>
+              <p id="wind"></p>
+            </div>
+          </section>
+        </section>
+      </div>
+</body>
+<script>
+var inputval = document.querySelector('#cityinput')
+var btn = document.querySelector('#submit');
+var city = document.querySelector('#cityoutput')
+var descrip = document.querySelector('#description')
+var temp = document.querySelector('#temp')
+var wind = document.querySelector('#wind')
+apik='356e292aa040d2cddded971dc402ae8a' 
+function convertion(val)
+{
+    return (val - 273).toFixed(2)
+}
+
+btn.addEventListener('click', function()
+{
+  fetch('https://api.openweathermap.org/data/2.5/weather?q='+inputval.value+'&appid='+apik)
+  .then(res => res.json())
+
+
+  .then(result => 
+  {
+    var nameval = result['name']
+    var descrip = result['weather']['0']['description']
+    var tempature = result['main']['temp']
+    var wndspd = result['wind']['speed']
+    city.innerHTML=`Weather of <span>${nameval}<span>`
+    temp.innerHTML = `Temperature: <span>${ convertion(tempature)} C</span>`
+    description.innerHTML = `Sky Conditions: <span>${descrip}<span>`
+    wind.innerHTML = `Wind Speed: <span>${wndspd} km/h<span>`
+
+  })
+
+  .catch(err => alert('You entered Wrong city name'))
+})
+</script>
+</html>
+
+
+
+
+
+<!-- then(data => {...}): This is a function call using the then method, which is typically used in Promises to handle the asynchronous response of an operation. The data => {...} is an arrow function (ES6 syntax) that takes a parameter called data, which represents the response data obtained from the Promise.
+
+var nameval = data['name']: This line declares a variable called nameval and assigns it the value of the name property from the data object. In this context, data is assumed to be a JavaScript object, and name is one of its properties. It's common to use square brackets ([]) to access object properties when the property name is dynamic or contains special characters.
+
+var descrip = data['weather']['0']['description']: This line declares a variable called descrip and assigns it the value of the description property from the first element (index 0) of the weather array within the data object. Here, weather is an array of weather data, and we access the first element (index 0) using square brackets. Then, we access the description property within that element.
+
+var tempature = data['main']['temp']: This line declares a variable called tempature and assigns it the value of the temp property from the main object within the data object. It's similar to the previous line, but here we directly access the temp property from the main object.
+
+var wndspd = data['wind']['speed']: This line declares a variable called wndspd and assigns it the value of the speed property from the wind object within the data object. Just like the previous lines, we access nested properties by chaining the square bracket notation -->
